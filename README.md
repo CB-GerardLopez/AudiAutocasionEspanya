@@ -10,7 +10,7 @@ Web Scraper dels preus i característiques dels vehicles de la marca AUDI de seg
 
 ```
 pip install Scrapy
-``
+```
 
 - El pdf "Descripció del Projecte" conté les respostes a les preguntes de l'enunciat del projecte
 

@@ -6,15 +6,17 @@ from scrapy.crawler import CrawlerRunner
 from scrapy.utils.log import configure_logging
 
 
-# Creem l'aranya per extreure les url's dels cotxes
+# Creem la classe de l'aranya per extreure les url's dels cotxes
 class FitxaCotxe(scrapy.Spider):
     name = "FitxaCotxe"
-
+    
+    # Establim un temps de 2 segons entre peticions
     download_delay = 2
 
-    # URL a analitzar
+    # URL base a analitzar
     start_urls = ["https://www.autocasion.com/coches-segunda-mano/audi-ocasion"]
 
+    # Mètode que selecciona les URL's dels vehicles
     def parse(self, response):
         for href in response.xpath('//article[contains(@class, "anuncio")]'):
             url = response.urljoin(href.xpath('.//a/@href').extract_first())
@@ -22,11 +24,14 @@ class FitxaCotxe(scrapy.Spider):
             time.sleep(2)
             yield req
 
+        # Avancem a la següent pàgina
         next_page_url = response.xpath('//a[contains(text(), "Siguiente")]/@href').extract_first()
         if next_page_url is not None:
             yield scrapy.Request(response.urljoin(next_page_url))
 
+    # Mètode que selecciona les informacions de cada vehicle
     def parse_fitxa(self, response):
+        # Obrim l'arxiu csv de sortida de les dades
         with open("audi.csv", 'a', newline='', encoding='utf-8') as outfile:
             fieldnames = ['descripcio', 'descripcio2', 'any', 'provincia', 'kms', 'matriculacio', 'garantia', 'color',
                           'ambiental', 'preu', 'preu-nou', 'llarg', 'ample', 'alt', 'batalla', 'maleter', 'peso-max',
@@ -39,6 +44,7 @@ class FitxaCotxe(scrapy.Spider):
             writer = csv.DictWriter(outfile, fieldnames=fieldnames, delimiter=';')
 
             for item in response.xpath('//div[contains(@class, "container ficha-vo sheet")]'):
+                # Creem un diccionari per recollir les dades del vehicle
                 fitxa = {}
 
                 try:
@@ -206,12 +212,14 @@ class FitxaCotxe(scrapy.Spider):
                     fitxa['data-publicacio'] = valor[-10:]
                 except:
                     fitxa['data-publicacio'] = ""
-
+                
+                # Escriu la informació del vehicle al csv
                 writer.writerow(fitxa)
 
 
 if __name__ == "__main__":
-
+    
+    # Definim i configurem el Crawler que cercarà la informació
     configure_logging()
     runner = CrawlerRunner()
 
@@ -219,6 +227,7 @@ if __name__ == "__main__":
     def crawl():
         yield runner.crawl(FitxaCotxe)
         reactor.stop()
-
+    
+    # Llencem la cerca
     crawl()
     reactor.run()

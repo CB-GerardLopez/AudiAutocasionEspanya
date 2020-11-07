@@ -6,7 +6,7 @@ Web Scraper dels preus i característiques dels vehicles de la marca AUDI de seg
 
 ## Descripció dels fitxers
 
-- El fitxer main.py conté el codi en Python per l'aranya. La principal llibreria utilitzada per al disseny de l'scraper ha estat [Scrapy](https://scrapy.org/). 
+- El fitxer "main.py" conté el codi en Python per l'aranya. La principal llibreria utilitzada per al disseny de l'scraper ha estat [Scrapy](https://scrapy.org/). 
 
 ```
 pip install Scrapy

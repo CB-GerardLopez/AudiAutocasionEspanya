@@ -14,7 +14,7 @@ pip install Scrapy
 
 - El pdf "Descripció del Projecte" conté les respostes a les preguntes de l'enunciat del projecte
 
-- El document XXXXXX conté el DOI a les dades
+- El document "DOI Dades" conté el DOI a les dades
 
 ## Integrants
 
